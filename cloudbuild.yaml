@@ -10,3 +10,9 @@ steps:
       print("***********************")
       print(branch_name)
       print("***********************")
+
+options:
+  logging: CLOUD_LOGGING_ONLY  # or use logsBucket or REGIONAL_USER_OWNED_BUCKET
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+
+serviceAccount: 764647465318@cloudbuild.gserviceaccount.com  # Specify your service account email
