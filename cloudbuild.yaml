@@ -1,0 +1,12 @@
+steps:
+- id: 'branch name'
+  name: 'python:3.9'
+  entrypoint: 'python'
+  args:
+  - '-c'
+  - |
+      import os
+      branch_name = os.getenv('BRANCH_NAME')
+      print("***********************")
+      print(branch_name)
+      print("***********************")
