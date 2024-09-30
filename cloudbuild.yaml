@@ -2,6 +2,8 @@ steps:
 - id: 'branch name'
   name: 'python:3.9'
   entrypoint: 'python'
+  env: 
+  - 'BRANCH_NAME=${BRANCH_NAME}'
   args:
   - '-c'
   - |
