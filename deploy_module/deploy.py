@@ -1,7 +1,5 @@
 from google.cloud import dataplex_v1
 from google.api_core.exceptions import AlreadyExists
-from deploy_module.credentials import CredentialsManager
-from deploy_module.rules_reader import RulesReader
 import yaml
 import os
 
@@ -10,9 +8,8 @@ class DataScanManager:
     def __init__(self, env='dev'):
         self.env = env
         self.root_path = os.path.dirname(os.path.dirname(__file__))
-        __credentials = CredentialsManager(env=self.env).get_credentials()
-        self.client = dataplex_v1.DataScanServiceClient(credentials=__credentials)
         self.config = self.read_config()
+        self.client = dataplex_v1.DataScanServiceClient()
 
     def read_config(self):
         """Load a config YAML file and return its contents as a dictionary."""
@@ -20,16 +17,15 @@ class DataScanManager:
             config_file_path = os.path.join(self.root_path, 'configs/dev_config.yaml')
         else:
             config_file_path = os.path.join(self.root_path, 'configs/prod_config.yaml')
+
         with open(config_file_path, 'r') as config:
             config_yaml = yaml.safe_load(config)
             return config_yaml
 
     def create_data_scan(self):
-        """Create a new DataScan using the parameters from the config."""
         parent = self.config['parent']
-        data_scan_id = "py-scan"  # You can modify this to be dynamic if needed
+        data_scan_id = "py-scan"
 
-        # Initialize the DataScan object
         data_scan = dataplex_v1.DataScan()
 
         # Create a DataQualityRule object
@@ -55,8 +51,8 @@ class DataScanManager:
             data_scan_id=data_scan_id,
         )
 
-        # Attempt to create the DataScan
         try:
+            # Attempt to create the DataScan
             response = self.client.create_data_scan(request=request)
             print("DataScan created successfully:", response)
         except AlreadyExists:
@@ -80,4 +76,6 @@ class DataScanManager:
 
 # Example usage
 if __name__ == "__main__":
-    pass
+    manager = DataScanManager(env='dev')  # Or 'prod' for production
+    manager.create_data_scan()
+

@@ -1,21 +1,18 @@
 from google.cloud import storage
 from google.oauth2 import service_account
 import json
+import os
 
 
 class CredentialsManager:
     def __init__(self, env):
-        self.__bucket_name = 'dataplex_creds'
-        if env.lower() == 'dev':
-            self.__cred_object_name = 'dataplex-dev-credentials.json'
-        else:
-            self.__cred_object_name = 'dataplex-prod-credentials.json'
+      self.__cred_object_name = 'dataplex-dev-credentials.json'
+      self.root_path = os.path.dirname(os.path.dirname(__file__))
 
-        self.storage_client = storage.Client()
+
 
     def get_credentials(self):
-        bucket = self.storage_client.bucket(self.__bucket_name)
-        blob = bucket.blob(self.__cred_object_name)
+        with open(self.__cred_object_name)
 
         service_account_json = blob.download_as_string()
 

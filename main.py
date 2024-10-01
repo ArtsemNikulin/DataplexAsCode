@@ -1,6 +1,5 @@
-from deploy_module.rules_reader import RulesReader
+from deploy_module.deploy import DataScanManager
 
 
 
-rules = RulesReader('rules/dev/datasets').get_all_rules()
-print(rules)
+DataScanManager().create_data_scan()
