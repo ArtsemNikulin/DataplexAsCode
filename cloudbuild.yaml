@@ -1,20 +1,35 @@
 steps:
-- id: 'branch name'
-  name: 'python:3.9'
-  entrypoint: 'python'
-  env: 
-  - 'BRANCH_NAME=${BRANCH_NAME}'
-  args:
-  - '-c'
-  - |
-      import os
-      branch_name = os.getenv('BRANCH_NAME')
-      print("***********************")
-      print(branch_name)
-      print("***********************")
+  - id: 'branch name'
+    name: 'python:3.9'
+    entrypoint: 'python'
+    env:
+      - 'BRANCH_NAME=${BRANCH_NAME}'
+    args:
+      - '-c'
+      - |
+          import os
+          branch_name = os.getenv('BRANCH_NAME')
+          print("***********************")
+          print(branch_name)
+          print("***********************")
+
+  - id: 'execution'
+    name: 'python:3.9'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+          
+          # Execute the code
+          python -c "
+          from deploy_module.credentials import CredentialsManager
+          manager = CredentialsManager('dev')
+          credentials = manager.get_credentials()
+          print(credentials)
+          "
 
 options:
-  logging: CLOUD_LOGGING_ONLY  # or use logsBucket or REGIONAL_USER_OWNED_BUCKET
+  logging: CLOUD_LOGGING_ONLY
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
 
-serviceAccount: 764647465318@cloudbuild.gserviceaccount.com  # Specify your service account email
+serviceAccount: 'dataplex-vcs@dataplex-dev-437306.iam.gserviceaccount.com'
