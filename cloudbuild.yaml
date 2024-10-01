@@ -1,4 +1,13 @@
 steps:
+  # Step to install dependencies
+  - id: 'install dependencies'
+    name: 'python:3.9'
+    entrypoint: 'pip'
+    args:
+      - install
+      - -r
+      - requirements.txt
+
   - id: 'branch name'
     name: 'python:3.9'
     entrypoint: 'python'
@@ -13,23 +22,22 @@ steps:
           print(branch_name)
           print("***********************")
 
-  - id: 'execution'
+  - id: "execution"
     name: 'python:3.9'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-          
-          # Execute the code
-          python -c "
-          from deploy_module.credentials import CredentialsManager
-          manager = CredentialsManager('dev')
-          credentials = manager.get_credentials()
-          print(credentials)
-          "
+        python -c "
+        from deploy_module.credentials import CredentialsManager
+        manager = CredentialsManager()  # No argument needed; it uses ADC
+        credentials = manager.get_credentials()  # This will now use ADC
+        print(credentials)
+        "
 
 options:
   logging: CLOUD_LOGGING_ONLY
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+
 
 serviceAccount: 'dataplex-vcs@dataplex-dev-437306.iam.gserviceaccount.com'
