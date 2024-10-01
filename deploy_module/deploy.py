@@ -76,6 +76,6 @@ class DataScanManager:
 
 # Example usage
 if __name__ == "__main__":
-    manager = DataScanManager(env='dev')  # Or 'prod' for production
+    manager = DataScanManager(env='dev')
     manager.create_data_scan()
 
