@@ -1,5 +1,6 @@
-from deploy_module.credentials import CredentialsManager
+from deploy_module.rules_reader import RulesReader
 
-manager = CredentialsManager('dev')
-credentials = manager.get_credentials()
-print(credentials)
+
+
+rules = RulesReader('rules/dev/datasets').get_all_rules()
+print(rules)

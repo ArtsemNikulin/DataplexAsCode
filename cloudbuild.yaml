@@ -8,10 +8,8 @@ steps:
     args:
       - '-c'
       - |
-        from deploy_module.credentials import CredentialsManager
-        manager = CredentialsManager('dev')
-        credentials = manager.get_credentials()
-        print(credentials)
+        rules = RulesReader('rules/dev/datasets').get_all_rules()
+        print(rules)
 
 options:
   logging: CLOUD_LOGGING_ONLY
