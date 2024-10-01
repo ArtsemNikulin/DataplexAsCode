@@ -1,5 +1,4 @@
 from deploy_module.deploy import DataScanManager
 
-
-
-DataScanManager().create_data_scan()
+manager = DataScanManager(env='dev')  # Or 'prod' for production
+manager.create_data_scan()

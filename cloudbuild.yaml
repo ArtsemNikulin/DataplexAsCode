@@ -8,9 +8,9 @@ steps:
     args:
       - '-c'
       - |
-        from deploy_module.rules_reader import RulesReader
-        rules = RulesReader('rules/dev/datasets').get_all_rules()
-        print(rules)
+        from deploy_module.deploy import DataScanManager
+        manager = DataScanManager(env='dev')  # Or 'prod' for production
+        manager.create_data_scan()
 
 options:
   logging: CLOUD_LOGGING_ONLY
