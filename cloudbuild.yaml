@@ -22,20 +22,18 @@ steps:
           print("***********************")
 
   - id: "execution"
-    name: 'python:3.9'
-    entrypoint: 'bash'
+    name: 'python:3.9'  # Retain the same image for execution
+    entrypoint: 'python'  # Use Python directly to execute your code
     args:
       - '-c'
       - |
-        python -c "
         from deploy_module.credentials import CredentialsManager
         manager = CredentialsManager('dev')
         credentials = manager.get_credentials()
         print(credentials)
-        "
 options:
   logging: CLOUD_LOGGING_ONLY
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
 
-# Use your service account here
+
 serviceAccount: 'dataplex-vcs@dataplex-dev-437306.iam.gserviceaccount.com'
