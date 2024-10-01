@@ -1,12 +1,11 @@
 steps:
-  # Step to install dependencies
-  - id: 'install dependencies'
+  - id: 'Install dependencies'
     name: 'python:3.9'
-    entrypoint: 'pip'
+    entrypoint: 'bash'
     args:
-      - install
-      - -r
-      - requirements.txt
+      - '-c'
+      - |
+        pip install google-cloud-storage google-oauth2-tool
 
   - id: 'branch name'
     name: 'python:3.9'
@@ -30,14 +29,13 @@ steps:
       - |
         python -c "
         from deploy_module.credentials import CredentialsManager
-        manager = CredentialsManager()  # No argument needed; it uses ADC
-        credentials = manager.get_credentials()  # This will now use ADC
+        manager = CredentialsManager('dev')
+        credentials = manager.get_credentials()
         print(credentials)
         "
-
 options:
   logging: CLOUD_LOGGING_ONLY
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
 
-
+# Use your service account here
 serviceAccount: 'dataplex-vcs@dataplex-dev-437306.iam.gserviceaccount.com'
