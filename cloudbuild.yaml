@@ -1,12 +1,20 @@
 steps:
-- id: 'branch name'
-  name: 'python:3.9'
-  entrypoint: 'python'
-  args:
-  - '-c'
-  - |
-      import os
-      branch_name = os.getenv('BRANCH_NAME')
-      print("***********************")
-      print(branch_name)
-      print("***********************")
+  - id: 'Build image'
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-python-app', '.']
+
+  - id: 'Run application'
+    name: 'gcr.io/$PROJECT_ID/my-python-app'
+    args:
+      - '-c'
+      - |
+        from deploy_module.deploy import DataScanManager
+        manager = DataScanManager(env='dev')  # Or 'prod' for production
+        manager.create_data_scan()
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+
+serviceAccount: 'dataplex-vcs@dataplex-dev-437306.iam.gserviceaccount.com'
+
