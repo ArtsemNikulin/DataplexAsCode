@@ -16,7 +16,7 @@ steps:
         branch_name = os.getenv('BRANCH_NAME')
         project_id = os.getenv('PROJECT_ID')
         print("*********************************************")
-        print(f"Merge of {branch_name} branch TO {project_id}")
+        print(f"Deploy of {branch_name} branch ON {project_id}")
         print("*********************************************")
         manager = DataScanManager(env=branch_name)
         manager.create_data_scan()
