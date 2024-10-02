@@ -17,7 +17,6 @@ class DataScanManager:
             config_file_path = os.path.join(self.root_path, 'configs/dev_config.yaml')
         elif self.env.lower() == 'prod':
             config_file_path = os.path.join(self.root_path, 'configs/prod_config.yaml')
-        print(f'!!!!!!!!!!!!!!!!!!!{config_file_path}!!!!!!!!!!!!!!!!!!!!!!!!')
 
         with open(config_file_path, 'r') as config:
             config_yaml = yaml.safe_load(config)
