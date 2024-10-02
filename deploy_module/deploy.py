@@ -23,7 +23,7 @@ class DataScanManager:
             config_yaml = yaml.safe_load(config)
             return config_yaml
 
-    def create_data_scan(self):
+    def create_data_scan(self, validate=False):
         parent = self.config['parent']
         data_scan_id = "py-scan"
 
@@ -50,7 +50,7 @@ class DataScanManager:
             parent=parent,
             data_scan=data_scan,
             data_scan_id=data_scan_id,
-            validate_only=True
+            validate_only=validate
         )
 
         try:
