@@ -74,12 +74,12 @@ class DataScanManager:
             print(f"Failed to delete DataScan '{data_scan_id}': {e}")
 
     def validate_data_scan(self, data_scan_id='asdasda'):
-        url = f"https://dataplex.googleapis.com/v1/projects/{self.project_id}/locations/{self.location}/dataScans?dataScanId={data_scan_id}&validateOnly=true"
+        url = f"https://dataplex.googleapis.com/v1/projects/dataplex-dev-437306/locations/us-central1/dataScans?dataScanId={data_scan_id}&validateOnly=true"
 
         # Prepare the request body
         request_body = {
             "data": {
-                "resource": f"//bigquery.googleapis.com/projects/{self.project_id}/datasets/dataset_a/tables/table_a"
+                "resource": f"//bigquery.googleapis.com/projects/dataplex-dev-437306/datasets/dataset_a/tables/table_a"
             },
             "dataQualitySpec": {
                 "rules": [

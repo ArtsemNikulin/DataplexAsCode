@@ -14,7 +14,7 @@ steps:
         import os
         branch_name = os.getenv('BRANCH_NAME')
         print("*******************************")
-        print(f"Validation for {branch_name} environment")
+        print(f"Validation of {branch_name} on dev environment")
         print("*******************************")
         manager = DataScanManager(env='dev')
         manager.validate_data_scan()
