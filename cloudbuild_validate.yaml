@@ -18,7 +18,7 @@ steps:
         base_branch = os.getenv('BASE_BRANCH')
         pr = os.getenv('PR')
         print("*********************************************")
-        print(f"Validation of {branch_name} on {base_branch}")
+        print(f"Validation of {pr}: {branch_name} on {base_branch}")
         print("*********************************************")
         manager = DataScanManager(env=base_branch)
         manager.create_data_scan(validate=True)
