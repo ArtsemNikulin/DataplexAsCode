@@ -9,7 +9,12 @@ steps:
       - '-c'
       - |
         from deploy_module.deploy import DataScanManager
-        manager = DataScanManager(env='dev')  # Or 'prod' for production
+        import os
+        branch_name = os.getenv('BRANCH_NAME')
+        print("***********************")
+        print(Deploy for branch_name environment)
+        print("***********************")
+        manager = DataScanManager(env=branch_name)
         manager.create_data_scan()
 
 options:
