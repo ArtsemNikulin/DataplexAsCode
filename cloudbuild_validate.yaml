@@ -7,14 +7,16 @@ steps:
     name: 'gcr.io/$PROJECT_ID/my-python-app'
     env:
       - 'BRANCH_NAME=$BRANCH_NAME'
+      - 'BASE_BRANCH=$_BASE_BRANCH'
     args:
       - '-c'
       - |
         from deploy_module.deploy import DataScanManager
         import os
         branch_name = os.getenv('BRANCH_NAME')
+        base_branch = os.getenv('BASE_BRANCH')
         print("*******************************")
-        print(f"Validation of {branch_name} on dev environment")
+        print(f"Validation of {branch_name} on {base_branch}")
         print("*******************************")
         manager = DataScanManager(env='dev')
         manager.create_data_scan()

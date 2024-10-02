@@ -14,8 +14,8 @@ steps:
         import os
         branch_name = os.getenv('BRANCH_NAME')
         print("*******************************")
-          print(f"Deploy for {branch_name} environment")
-          print("*******************************")
+        print(f"Deploy for {branch_name} environment")
+        print("*******************************")
         if branch_name.lower() == 'dev':
           print("executed")
           #manager = DataScanManager(env=branch_name)
