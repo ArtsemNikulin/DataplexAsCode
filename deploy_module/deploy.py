@@ -1,5 +1,6 @@
 from google.cloud import dataplex_v1
 from google.api_core.exceptions import AlreadyExists
+from deploy_module.rules_reader import RulesReader
 import yaml
 import os
 
@@ -23,7 +24,13 @@ class DataScanManager:
             return config_yaml
 
     def create_data_scan(self, validate=False):
-        data_scan_id = "py-scan"
+        # all_rules = RulesReader(self.config['data_quality_rules']).get_all_rules()
+        # print(all_rules)
+        # for dataset, tables in all_rules.items():
+        #     for table, rules in tables.items():
+        #         print(dataset, table, rules)
+
+        data_scan_id = f"rtetrter"
 
         data_scan = dataplex_v1.DataScan()
 
@@ -34,7 +41,8 @@ class DataScanManager:
             description="test",
             non_null_expectation={},
             threshold=1.0,
-            name="testsets"
+            name="testsets",
+            sql_assertion=None
         )
 
         # Add the rule to the data_quality_spec
