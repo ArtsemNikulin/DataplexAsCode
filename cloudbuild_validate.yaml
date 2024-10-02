@@ -13,7 +13,7 @@ steps:
         from deploy_module.deploy import DataScanManager
         import os
         branch_name = os.getenv('BRANCH_NAME')
-        print("*******************************")
+        print("*********************************")
           print(f"Validation for {branch_name} environment")
           print("*******************************")
                
