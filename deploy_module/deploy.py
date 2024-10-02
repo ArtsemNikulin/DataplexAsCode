@@ -42,9 +42,6 @@ class DataScanManager:
 
         # Set the entity to point to the BigQuery table
         data_scan.data.resource = f"//bigquery.googleapis.com/projects/{self.config['project_id']}/datasets/dataset_a/tables/table_a"
-        print(f"!!!!!!!!!! //bigquery.googleapis.com/projects/{self.config['project_id']}/datasets/dataset_a/tables/table_a !!!!!!!!!!!")
-
-
 
         # Create the request
         request = dataplex_v1.CreateDataScanRequest(
