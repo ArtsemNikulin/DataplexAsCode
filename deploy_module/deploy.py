@@ -3,6 +3,7 @@ from google.api_core.exceptions import AlreadyExists
 import yaml
 import os
 import requests
+from google.auth import default
 
 class DataScanManager:
     def __init__(self, env='dev'):
@@ -73,13 +74,14 @@ class DataScanManager:
         except Exception as e:
             print(f"Failed to delete DataScan '{data_scan_id}': {e}")
 
-    def validate_data_scan(self, data_scan_id='asdasda'):
-        url = f"https://dataplex.googleapis.com/v1/projects/dataplex-dev-437306/locations/us-central1/dataScans?dataScanId={data_scan_id}&validateOnly=true"
+    def validate_data_scan(self, data_scan_id):
+        """Validate if a DataScan can be created without actually creating it."""
+        url = f"https://dataplex.googleapis.com/v1/projects/{self.project_id}/locations/{self.location}/dataScans?dataScanId={data_scan_id}&validateOnly=true"
 
         # Prepare the request body
         request_body = {
             "data": {
-                "resource": f"//bigquery.googleapis.com/projects/dataplex-dev-437306/datasets/dataset_a/tables/table_a"
+                "resource": f"//bigquery.googleapis.com/projects/{self.project_id}/datasets/dataset_a/tables/table_a"
             },
             "dataQualitySpec": {
                 "rules": [
@@ -95,12 +97,13 @@ class DataScanManager:
             }
         }
 
-        # Use the credentials from the DataScanServiceClient
-        credentials = self.client.transport.credentials
+        # Get the default credentials, which will automatically handle authentication
+        credentials, _ = default()
+        access_token = credentials.token  # Get the access token
 
         # Set the headers
         headers = {
-            "Authorization": f"Bearer {credentials.token}",
+            "Authorization": f"Bearer {access_token}",
             "Accept": "application/json",
             "Content-Type": "application/json"
         }
