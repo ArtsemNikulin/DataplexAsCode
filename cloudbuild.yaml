@@ -7,29 +7,26 @@ steps:
     name: 'gcr.io/$PROJECT_ID/my-python-app'
     env:
       - 'BRANCH_NAME=$BRANCH_NAME'
+      - 'BASE_BRANCH=$_BASE_BRANCH'
+      - 'PR=$_PR_NUMBER'
     args:
       - '-c'
       - |
         from deploy_module.deploy import DataScanManager
         import os
         branch_name = os.getenv('BRANCH_NAME')
-        print("*******************************")
-        print(f"Deploy for {branch_name} environment")
-        print("*******************************")
-        if branch_name.lower() == 'dev':
-          print("executed")
-          #manager = DataScanManager(env=branch_name)
-          #manager.create_data_scan()
-        else:
-          print("not executed")
-        
+        base_branch = os.getenv('BASE_BRANCH')
+        pr = os.getenv('PR')
+        print("*********************************************")
+        print(f"Merge of PR #{pr}: {branch_name} TO {base_branch}")
+        print("*********************************************")
+        manager = DataScanManager(env=base_branch)
+        manager.create_data_scan(validate)
+               
 
 options:
   logging: CLOUD_LOGGING_ONLY
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
 
 serviceAccount: 'dataplex-vcs@dataplex-dev-437306.iam.gserviceaccount.com'
-substitutions:
-  _BRANCH_NAME: '${BRANCH_NAME}'
-
 
