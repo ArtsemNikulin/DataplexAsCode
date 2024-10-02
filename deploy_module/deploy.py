@@ -5,7 +5,7 @@ import os
 
 
 class DataScanManager:
-    def __init__(self, env='dev'):
+    def __init__(self, env):
         self.env = env
         self.root_path = os.path.dirname(os.path.dirname(__file__))
         self.config = self.read_config()
@@ -15,7 +15,7 @@ class DataScanManager:
         """Load a config YAML file and return its contents as a dictionary."""
         if self.env.lower() == 'dev':
             config_file_path = os.path.join(self.root_path, 'configs/dev_config.yaml')
-        else:
+        elif self.env.lower() == 'prod':
             config_file_path = os.path.join(self.root_path, 'configs/prod_config.yaml')
 
         with open(config_file_path, 'r') as config:
@@ -23,7 +23,6 @@ class DataScanManager:
             return config_yaml
 
     def create_data_scan(self, validate=False):
-        parent = self.config['parent']
         data_scan_id = "py-scan"
 
         data_scan = dataplex_v1.DataScan()
@@ -46,7 +45,7 @@ class DataScanManager:
 
         # Create the request
         request = dataplex_v1.CreateDataScanRequest(
-            parent=parent,
+            parent=self.config['parent'],
             data_scan=data_scan,
             data_scan_id=data_scan_id,
             validate_only=validate
@@ -57,9 +56,9 @@ class DataScanManager:
             print("DataScan created successfully:", response)
         except AlreadyExists:
             print(f"DataScan '{data_scan_id}' already exists. Recreating ...")
-            self.delete_data_scan(parent, data_scan_id)
+            self.delete_data_scan(self.config['parent'], data_scan_id)
             request = dataplex_v1.CreateDataScanRequest(
-                parent=parent,
+                parent=self.config['parent'],
                 data_scan=data_scan,
                 data_scan_id=data_scan_id,
                 validate_only=validate
@@ -67,12 +66,11 @@ class DataScanManager:
             response = self.client.create_data_scan(request=request)
             print("DataScan recreated successfully :", response)
 
-
     def delete_data_scan(self, parent, data_scan_id):
         """Delete the existing DataScan if it exists."""
         try:
             delete_request = dataplex_v1.DeleteDataScanRequest(
-                name=f"{parent}/dataScans/{data_scan_id}"
+                {'name': f"{parent}/dataScans/{data_scan_id}"}
             )
             self.client.delete_data_scan(request=delete_request)
             print(f"DataScan '{data_scan_id}' deleted successfully.")
