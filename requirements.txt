@@ -1,0 +1,6 @@
+google-cloud-dataplex
+google-cloud-storage
+google-oauth2-tool
+PyYAML
+google-api-core
+requests
