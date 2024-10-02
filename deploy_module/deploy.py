@@ -1,15 +1,19 @@
+from google.auth import default  # Ensure you have google-auth installed
+from google.auth.transport.requests import Request
 from google.cloud import dataplex_v1
-from google.api_core.exceptions import AlreadyExists
-import yaml
+import json
 import os
+import yaml
 import requests
-from google.auth import default
+
 
 class DataScanManager:
     def __init__(self, env='dev'):
         self.env = env
         self.root_path = os.path.dirname(os.path.dirname(__file__))
         self.config = self.read_config()
+        self.project_id = self.config['project_id']
+        self.location = 'us-central1'
         self.client = dataplex_v1.DataScanServiceClient()
 
     def read_config(self):
@@ -23,65 +27,14 @@ class DataScanManager:
             config_yaml = yaml.safe_load(config)
             return config_yaml
 
-    def create_data_scan(self):
-        parent = self.config['parent']
-        data_scan_id = "py-scan"
-
-        data_scan = dataplex_v1.DataScan()
-
-        # Create a DataQualityRule object
-        rule = dataplex_v1.DataQualityRule(
-            column="id",
-            dimension="COMPLETENESS",
-            description="test",
-            non_null_expectation={},
-            threshold=1.0,
-            name="testsets"
-        )
-
-        # Add the rule to the data_quality_spec
-        data_scan.data_quality_spec.rules.append(rule)
-
-        # Set the entity to point to the BigQuery table
-        data_scan.data.resource = f"//bigquery.googleapis.com/projects/{self.config['project_id']}/datasets/dataset_a/tables/table_a"
-
-        # Create the request
-        request = dataplex_v1.CreateDataScanRequest(
-            parent=parent,
-            data_scan=data_scan,
-            data_scan_id=data_scan_id,
-        )
-
-        try:
-            # Attempt to create the DataScan
-            response = self.client.create_data_scan(request=request)
-            print("DataScan created successfully:", response)
-        except AlreadyExists:
-            print(f"DataScan '{data_scan_id}' already exists. Deleting and recreating...")
-            self.delete_data_scan(parent, data_scan_id)  # Delete existing DataScan
-            # Create the DataScan again
-            response = self.client.create_data_scan(request=request)
-            print("DataScan recreated successfully:", response)
-
-    def delete_data_scan(self, parent, data_scan_id):
-        """Delete the existing DataScan if it exists."""
-        try:
-            delete_request = dataplex_v1.DeleteDataScanRequest(
-                name=f"{parent}/dataScans/{data_scan_id}"
-            )
-            self.client.delete_data_scan(request=delete_request)
-            print(f"DataScan '{data_scan_id}' deleted successfully.")
-        except Exception as e:
-            print(f"Failed to delete DataScan '{data_scan_id}': {e}")
-
-    def validate_data_scan(self, data_scan_id='asdasds'):
+    def validate_data_scan(self, data_scan_id):
         """Validate if a DataScan can be created without actually creating it."""
-        url = f"https://dataplex.googleapis.com/v1/projects/dataplex-dev-437306/locations/us-central1/dataScans?dataScanId={data_scan_id}&validateOnly=true"
+        url = f"https://dataplex.googleapis.com/v1/projects/{self.project_id}/locations/{self.location}/dataScans?dataScanId={data_scan_id}&validateOnly=true"
 
         # Prepare the request body
         request_body = {
             "data": {
-                "resource": f"//bigquery.googleapis.com/projects/dataplex-dev-437306/datasets/dataset_a/tables/table_a"
+                "resource": f"//bigquery.googleapis.com/projects/{self.project_id}/datasets/dataset_a/tables/table_a"
             },
             "dataQualitySpec": {
                 "rules": [
@@ -97,8 +50,9 @@ class DataScanManager:
             }
         }
 
-        # Get the default credentials, which will automatically handle authentication
+        # Get the default credentials
         credentials, _ = default()
+        credentials.refresh(Request())  # Refresh the credentials to get a valid access token
         access_token = credentials.token  # Get the access token
 
         # Set the headers
@@ -118,9 +72,3 @@ class DataScanManager:
         else:
             print(f"Validation failed: {response.status_code} - {response.text}")
             return False
-
-
-# Example usage
-if __name__ == "__main__":
-    manager = DataScanManager(env='dev')
-    manager.validate_data_scan()
