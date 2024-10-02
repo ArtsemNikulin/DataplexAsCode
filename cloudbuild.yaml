@@ -14,10 +14,15 @@ steps:
         import os
         branch_name = os.getenv('BRANCH_NAME')
         print("*******************************")
-        print(f"Deploy for {branch_name} environment")
-        print("*******************************")
-        manager = DataScanManager(env=branch_name)
-        #manager.create_data_scan()
+          print(f"Deploy for {branch_name} environment")
+          print("*******************************")
+        if branch_name.lower() == 'dev':
+          print("executed")
+          #manager = DataScanManager(env=branch_name)
+          #manager.create_data_scan()
+        else:
+          print("not executed")
+        
 
 options:
   logging: CLOUD_LOGGING_ONLY
