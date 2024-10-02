@@ -1,0 +1,27 @@
+steps:
+  - id: 'Build image'
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-python-app', '.']
+
+  - id: 'Run application'
+    name: 'gcr.io/$PROJECT_ID/my-python-app'
+    env:
+      - 'BRANCH_NAME=$BRANCH_NAME'
+    args:
+      - '-c'
+      - |
+        from deploy_module.deploy import DataScanManager
+        import os
+        branch_name = os.getenv('BRANCH_NAME')
+        print("*******************************")
+          print(f"Validation for {branch_name} environment")
+          print("*******************************")
+               
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+
+serviceAccount: 'dataplex-vcs@dataplex-dev-437306.iam.gserviceaccount.com'
+substitutions:
+  _BRANCH_NAME: '${BRANCH_NAME}'
