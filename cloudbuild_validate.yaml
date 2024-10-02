@@ -21,7 +21,7 @@ steps:
         print(f"Validation of PR #{pr}: {branch_name} TO {base_branch}")
         print("*********************************************")
         manager = DataScanManager(env=base_branch)
-        manager.create_data_scan()
+        manager.create_data_scan(validate=True)
                
 
 options:
