@@ -22,7 +22,7 @@ class DataScanManager:
             config_yaml = yaml.safe_load(config)
             return config_yaml
 
-    def create_data_scan(self):
+    def create_data_scan(self, validate=False):
         parent = self.config['parent']
         data_scan_id = "py-scan"
 
@@ -49,18 +49,24 @@ class DataScanManager:
             parent=parent,
             data_scan=data_scan,
             data_scan_id=data_scan_id,
+            validate_only=validate
         )
 
         try:
-            # Attempt to create the DataScan
             response = self.client.create_data_scan(request=request)
             print("DataScan created successfully:", response)
         except AlreadyExists:
-            print(f"DataScan '{data_scan_id}' already exists. Deleting and recreating...")
-            self.delete_data_scan(parent, data_scan_id)  # Delete existing DataScan
-            # Create the DataScan again
+            print(f"DataScan '{data_scan_id}' already exists. Recreating ...")
+            self.delete_data_scan(parent, data_scan_id)
+            request = dataplex_v1.CreateDataScanRequest(
+                parent=parent,
+                data_scan=data_scan,
+                data_scan_id=data_scan_id,
+                validate_only=validate
+            )
             response = self.client.create_data_scan(request=request)
-            print("DataScan recreated successfully:", response)
+            print("DataScan recreated successfully :", response)
+
 
     def delete_data_scan(self, parent, data_scan_id):
         """Delete the existing DataScan if it exists."""
@@ -78,4 +84,3 @@ class DataScanManager:
 if __name__ == "__main__":
     manager = DataScanManager(env='dev')
     manager.create_data_scan()
-
