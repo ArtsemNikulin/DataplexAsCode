@@ -2,7 +2,7 @@ from google.cloud import dataplex_v1
 from google.api_core.exceptions import AlreadyExists
 import yaml
 import os
-
+import requests
 
 class DataScanManager:
     def __init__(self, env='dev'):
@@ -73,9 +73,51 @@ class DataScanManager:
         except Exception as e:
             print(f"Failed to delete DataScan '{data_scan_id}': {e}")
 
+    def validate_data_scan(self, data_scan_id='asdasda'):
+        url = f"https://dataplex.googleapis.com/v1/projects/{self.project_id}/locations/{self.location}/dataScans?dataScanId={data_scan_id}&validateOnly=true"
+
+        # Prepare the request body
+        request_body = {
+            "data": {
+                "resource": f"//bigquery.googleapis.com/projects/{self.project_id}/datasets/dataset_a/tables/table_a"
+            },
+            "dataQualitySpec": {
+                "rules": [
+                    {
+                        "column": "id",
+                        "dimension": "COMPLETENESS",
+                        "description": "test",
+                        "nonNullExpectation": {},
+                        "threshold": 1.0,
+                        "name": "testsets"
+                    }
+                ]
+            }
+        }
+
+        # Use the credentials from the DataScanServiceClient
+        credentials = self.client.transport.credentials
+
+        # Set the headers
+        headers = {
+            "Authorization": f"Bearer {credentials.token}",
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+
+        # Make the POST request
+        response = requests.post(url, headers=headers, json=request_body)
+
+        # Handle the response
+        if response.status_code == 200:
+            print("Validation successful: The DataScan can be created.")
+            return True
+        else:
+            print(f"Validation failed: {response.status_code} - {response.text}")
+            return False
+
 
 # Example usage
 if __name__ == "__main__":
     manager = DataScanManager(env='dev')
-    manager.create_data_scan()
-
+    manager.validate_data_scan()

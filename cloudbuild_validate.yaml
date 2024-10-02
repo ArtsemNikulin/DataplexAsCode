@@ -16,6 +16,8 @@ steps:
         print("*******************************")
         print(f"Validation for {branch_name} environment")
         print("*******************************")
+        manager = DataScanManager(env='dev')
+        manager.validate_data_scan()
                
 
 options:
