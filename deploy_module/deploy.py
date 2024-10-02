@@ -32,7 +32,7 @@ class DataScanManager:
         # Create a DataQualityRule object
         rule = dataplex_v1.DataQualityRule(
             column="id",
-            dimension="COMPLETENESsS",
+            dimension="COMPLETENESS",
             description="test",
             non_null_expectation={},
             threshold=1.0,
