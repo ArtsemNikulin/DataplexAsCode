@@ -4,6 +4,7 @@ import yaml
 import os
 import requests
 from google.auth import default
+import warnings
 
 class DataScanManager:
     def __init__(self, env='dev'):
@@ -57,16 +58,17 @@ class DataScanManager:
             response = self.client.create_data_scan(request=request)
             print("DataScan created successfully:", response)
         except AlreadyExists:
-            print(f"DataScan '{data_scan_id}' already exists. Deleting and recreating with _duplicate postfix...")
-            #self.delete_data_scan(parent, data_scan_id)  # Delete existing DataScan
+            print(f"DataScan '{data_scan_id}' already exists. Recreating ...")
+            self.delete_data_scan(parent, data_scan_id)  # Delete existing DataScan
             request = dataplex_v1.CreateDataScanRequest(
                 parent=parent,
                 data_scan=data_scan,
-                data_scan_id=data_scan_id + '_duplicate',
+                data_scan_id=data_scan_id,
                 validate_only=validate
             )
             response = self.client.create_data_scan(request=request)
-            print("DataScan recreated successfully:", response)
+            print("DataScan recreated with successfully :", response)
+            warnings.warn(f"DataScan can was recreated", UserWarning)
 
     def delete_data_scan(self, parent, data_scan_id):
         """Delete the existing DataScan if it exists."""
