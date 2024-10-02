@@ -2,9 +2,7 @@ from google.cloud import dataplex_v1
 from google.api_core.exceptions import AlreadyExists
 import yaml
 import os
-import requests
-from google.auth import default
-import warnings
+
 
 class DataScanManager:
     def __init__(self, env='dev'):
@@ -59,7 +57,7 @@ class DataScanManager:
             print("DataScan created successfully:", response)
         except AlreadyExists:
             print(f"DataScan '{data_scan_id}' already exists. Recreating ...")
-            self.delete_data_scan(parent, data_scan_id)  # Delete existing DataScan
+            self.delete_data_scan(parent, data_scan_id)
             request = dataplex_v1.CreateDataScanRequest(
                 parent=parent,
                 data_scan=data_scan,
@@ -67,8 +65,8 @@ class DataScanManager:
                 validate_only=validate
             )
             response = self.client.create_data_scan(request=request)
-            print("DataScan recreated with successfully :", response)
-            warnings.warn(f"DataScan can was recreated", UserWarning)
+            print("DataScan recreated successfully :", response)
+
 
     def delete_data_scan(self, parent, data_scan_id):
         """Delete the existing DataScan if it exists."""
