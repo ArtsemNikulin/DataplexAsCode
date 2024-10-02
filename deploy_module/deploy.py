@@ -50,7 +50,7 @@ class DataScanManager:
             parent=parent,
             data_scan=data_scan,
             data_scan_id=data_scan_id,
-            validate_only=False
+            validate_only=True
         )
 
         try:
