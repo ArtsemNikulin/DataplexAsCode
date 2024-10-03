@@ -23,7 +23,7 @@ class DataScanManager:
             config_yaml = yaml.safe_load(config)
             return config_yaml
 
-    def create_data_scan(self, validate=False):
+    def create_data_scan(self, validate=False): #CREATE FROM YAML
         # all_rules = RulesReader(self.config['data_quality_rules']).get_all_rules()
         # print(all_rules)
         # for dataset, tables in all_rules.items():
