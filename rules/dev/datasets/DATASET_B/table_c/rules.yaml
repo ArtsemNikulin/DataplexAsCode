@@ -1,5 +1,3 @@
-samplingPercent: 100
-rowFilter:
 rules:
   - column: id
     dimension: COMPLETENESS
