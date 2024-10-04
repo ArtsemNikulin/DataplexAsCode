@@ -1,5 +1,5 @@
 import json
-
+import time
 from google.cloud import dataplex_v1
 from google.api_core.exceptions import AlreadyExists
 from deploy_module.rules_reader import RulesReader
@@ -62,6 +62,7 @@ class DataScanManager:
                 print(f"DataScan '{data_scan_id} ({dataplex_data_scan.display_name})' already exists. Recreating ...")
 
                 self.delete_data_scan(self.config['parent'], data_scan_id)
+                time.sleep(5)
                 request = dataplex_v1.CreateDataScanRequest()
                 request.parent = self.config['parent']
                 request.data_scan = dataplex_data_scan
