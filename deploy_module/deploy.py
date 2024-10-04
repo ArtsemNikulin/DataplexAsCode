@@ -26,35 +26,28 @@ class DataScanManager:
             config_yaml = yaml.safe_load(config)
             return config_yaml
 
-
-
     def form_data_scans(self):
         dataplex_data_scans = []
         for dataset_with_rules in self.datasets_with_rules:
             dataset = dataset_with_rules['dataset'].lower()
             table = dataset_with_rules['table']
-            #data_quality_rule = dataplex_v1.DataQualityRule().column='id'
             rules = dataset_with_rules['rules']
-            # for rule in dataplex_scan['rules']:
-            #     x.append(self.create_rule(rule))
-            # print(dataset, table, len(x))
-            # dq_rules = [self.create_rule(rule) for rule in dataplex_scan['rules']]
-            # print(dq_rules)
             dataplex_data_scan = dataplex_v1.DataScan()
             dataplex_data_scan.display_name = f"{self.env}.{dataset}.{table}"
-            dataplex_data_scan.data.resource = f"//bigquery.googleapis.com/projects/{self.config['project_id']}/datasets/{dataset}/tables/{table}"
+            dataplex_data_scan.data.resource = f"//bigquery.googleapis.com/projects/{self.config['project_id']}/" \
+                                               f"datasets/{dataset}/tables/{table}"
             dataplex_data_scan.data_quality_spec.rules = rules
-        #     dataplex_data_scan.data_quality_spec.sampling_percent = dataplex_scan.get('samplingPercent', 100)
-        #     dataplex_data_scan.data_quality_spec.row_filter = dataplex_scan.get('rowFilter', "")
-        #     dataplex_data_scan.data_quality_spec.post_scan_actions.bigquery_export.results_table = self.config[
-        #         'results_table']
-        #     dataplex_data_scan.labels = dataplex_scan.get('labels', {})
-        #
+            dataplex_data_scan.data_quality_spec.sampling_percent = dataset_with_rules.get('samplingPercent', 100)
+            dataplex_data_scan.data_quality_spec.row_filter = dataset_with_rules.get('rowFilter', "")
+            dataplex_data_scan.data_quality_spec.post_scan_actions.bigquery_export.results_table =\
+                self.config['results_table']
+            dataplex_data_scan.labels = dataset_with_rules.get('labels', {})
             dataplex_data_scans.append(dataplex_data_scan)
+
         return dataplex_data_scans
 
     def create_data_scans(self, validate=False):
-        data_scan_id = 'scan' + str(uuid.uuid4())
+        data_scan_id = 'scan_' + str(uuid.uuid4())
         for dataplex_data_scan in self.form_data_scans():
             request = dataplex_v1.CreateDataScanRequest()
             request.parent = self.config['parent']
