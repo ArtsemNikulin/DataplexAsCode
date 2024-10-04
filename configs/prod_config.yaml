@@ -1,3 +1,4 @@
 project_id: dataplex-prod-437306
 data_quality_rules: rules/prod/datasets
 parent: projects/dataplex-prod-437306/locations/us-central1
+results_table: //bigquery.googleapis.com/projects/dataplex-prod-437306/datasets/dataplex_results/tables/results

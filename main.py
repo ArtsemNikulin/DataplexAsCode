@@ -1,8 +1,7 @@
 import json
-from deploy_module.rules_reader import RulesReader
+from deploy_module.deploy import DataScanManager
 
-x = RulesReader(r"C:\Users\Artsem_Nikulin\Downloads\orders.yaml").read_rules_yaml(r"C:\Users\Artsem_Nikulin\PycharmProjects\DataplexAsCode\rules\dev\datasets\DATASET_A\table_a\rules.yaml")
-print(
-    json.dumps(x, indent=4)
-)
+x = DataScanManager('dev').create_data_scans()
+
+# print(json.dumps(x, indent=4))
 
