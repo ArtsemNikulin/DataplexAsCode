@@ -46,30 +46,30 @@ class DataScanManager:
 
         return dataplex_data_scans
 
+    def create_scan_id(self):
+        id = str(uuid.uuid4())
+        return id
+
     def create_data_scans(self, validate=False):
-        data_scan_id = 'scan-' + str(uuid.uuid4())
+
         for dataplex_data_scan in self.form_data_scans():
             request = dataplex_v1.CreateDataScanRequest()
             request.parent = self.config['parent']
             request.data_scan = dataplex_data_scan
-            request.data_scan_id = data_scan_id
+            request.data_scan_id = 'scan-' + str(uuid.uuid4())
             request.validate_only = validate
 
             try:
                 response = self.client.create_data_scan(request=request)
                 print("DataScan created successfully:", response)
             except AlreadyExists:
-                print(f"DataScan '{data_scan_id} ({dataplex_data_scan.display_name})' already exists. Recreating ...")
+                print(f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' already exists. Recreating ...")
 
-                self.delete_data_scan(self.config['parent'], data_scan_id)
+                self.delete_data_scan(self.config['parent'], request.data_scan_id)
                 time.sleep(5)
-                request = dataplex_v1.CreateDataScanRequest()
-                request.parent = self.config['parent']
-                request.data_scan = dataplex_data_scan
-                request.data_scan_id = data_scan_id
-                request.validate_only = validate
+
                 response = self.client.create_data_scan(request=request)
-                print(f"DataScan '{data_scan_id} ({dataplex_data_scan.display_name})' recreated successfully :",
+                print(f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' recreated successfully :",
                       response)
 
     def delete_data_scan(self, parent, data_scan_id):
