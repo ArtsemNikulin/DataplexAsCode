@@ -62,7 +62,11 @@ class DataScanManager:
                 print(f"DataScan '{data_scan_id} ({dataplex_data_scan.display_name})' already exists. Recreating ...")
 
                 self.delete_data_scan(self.config['parent'], data_scan_id)
-
+                request = dataplex_v1.CreateDataScanRequest()
+                request.parent = self.config['parent']
+                request.data_scan = dataplex_data_scan
+                request.data_scan_id = data_scan_id
+                request.validate_only = validate
                 response = self.client.create_data_scan(request=request)
                 print(f"DataScan '{data_scan_id} ({dataplex_data_scan.display_name})' recreated successfully :",
                       response)
