@@ -19,8 +19,7 @@ steps:
         import os
         
         branch_name = os.getenv('BRANCH_NAME')
-        base_branch = os.getenv('BASE_BRANCH')
-        pr = os.getenv('PR')
+        project_id = os.getenv('PROJECT_ID')
                 
         print("*********************************************")
         print(f"Getting GIT changes")
