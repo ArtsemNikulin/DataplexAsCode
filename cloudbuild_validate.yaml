@@ -4,47 +4,10 @@ steps:
     args:
       - '-c'
       - |
-        # Fetch the latest commit
         git fetch origin $BRANCH_NAME
-        
-        # Get the list of changed files in the last commit
         CHANGED_FILES=$(git diff --name-only HEAD HEAD~1)
-        
-        # Print the changed files
         echo "Changed files: $CHANGED_FILES"
-        
-        # Initialize flags
-        rules_changed=false
-        other_changes=false
 
-        # Check for changes in rules.yaml files and other file types
-        for file in $CHANGED_FILES; do
-          if [[ $file == *"rules.yaml" ]]; then
-            rules_changed=true
-            echo "Changed rules.yaml file: $file"
-          elif [[ $file != *".yaml" ]]; then
-            other_changes=true
-          fi
-        done
-        
-        # Determine the final output
-        if [ "$other_changes" = true ] && [ "$rules_changed" = false ]; then
-          echo "No rules were changed."
-        fi
-        
-        # Save the results to a file for later steps
-        echo "RULES_CHANGED=$rules_changed" > $WORKSPACE/results.env
-        echo "OTHER_CHANGES=$other_changes" >> $WORKSPACE/results.env
-
-  - name: 'gcr.io/cloud-builders/echo'
-    entrypoint: 'sh'
-    args:
-      - '-c'
-      - |
-        # Print the environment variables set in the previous step
-        source $WORKSPACE/results.env
-        echo "Rules changed: $RULES_CHANGED"
-        echo "Other changes: $OTHER_CHANGES"
 
 options:
   logging: CLOUD_LOGGING_ONLY
