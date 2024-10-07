@@ -37,27 +37,27 @@ steps:
         echo "Changed files: $CHANGED_FILES"
         
         # Initialize flags
-        RULES_CHANGED=false
-        OTHER_CHANGES=false
+        rules_changed=false
+        other_changes=false
 
         # Check for changes in rules.yaml files and other file types
         for file in $CHANGED_FILES; do
           if [[ $file == *"rules.yaml" ]]; then
-            RULES_CHANGED=true
+            rules_changed=true
             echo "Changed rules.yaml file: $file"
           elif [[ $file != *".yaml" ]]; then
-            OTHER_CHANGES=true
+            other_changes=true
           fi
         done
         
         # Determine the final output
-        if [ "$OTHER_CHANGES" = true ] && [ "$RULES_CHANGED" = false ]; then
+        if [ "$other_changes" = true ] && [ "$rules_changed" = false ]; then
           echo "No rules were changed."
         fi
         
-        # Optionally, you can save the results to a file or pass them to subsequent steps
-        echo "RULES_CHANGED=$RULES_CHANGED" >> $WORKSPACE/results.env
-        echo "OTHER_CHANGES=$OTHER_CHANGES" >> $WORKSPACE/results.env
+        # Save the results to a file for later steps
+        echo "RULES_CHANGED=$rules_changed" > $WORKSPACE/results.env
+        echo "OTHER_CHANGES=$other_changes" >> $WORKSPACE/results.env
 
   - name: 'gcr.io/cloud-builders/echo'
     entrypoint: 'sh'
@@ -68,7 +68,6 @@ steps:
         source $WORKSPACE/results.env
         echo "Rules changed: $RULES_CHANGED"
         echo "Other changes: $OTHER_CHANGES"
-               
 
 options:
   logging: CLOUD_LOGGING_ONLY
