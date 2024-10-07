@@ -6,6 +6,7 @@ import os
 import uuid
 from deploy_module.git_changes import get_changed_files
 
+
 class DataScanManager:
     def __init__(self, env, datasets_with_rules):
         self.env = env
