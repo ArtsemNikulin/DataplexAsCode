@@ -51,7 +51,7 @@ class DataScanManager:
                 request = dataplex_v1.CreateDataScanRequest()
                 request.parent = self.config['parent']
                 request.data_scan = dataplex_data_scan
-                request.data_scan_id = 'scan-' + (dataplex_data_scan.display_name.replace('.', '_')).lower()
+                request.data_scan_id = 'scan-' + (dataplex_data_scan.display_name.replace('.', '-')).lower()
                 request.validate_only = validate
 
                 try:
