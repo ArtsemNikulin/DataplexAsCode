@@ -35,7 +35,8 @@ steps:
         print("*********************************************")
 
         datasets_with_rules = RulesReader(changed_rules).get_datasets_with_rules()
-        DataScanManager(env='dev', datasets_with_rules=datasets_with_rules).form_data_scans()
+        x = DataScanManager(env='dev', datasets_with_rules=datasets_with_rules).form_data_scans()
+        print(x)
 
 options:
   logging: CLOUD_LOGGING_ONLY
