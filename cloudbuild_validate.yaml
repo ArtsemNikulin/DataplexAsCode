@@ -15,6 +15,9 @@ steps:
         import subprocess
 
         def get_changed_files():
+            # Fetch the previous commit
+            subprocess.run(["git", "fetch", "--depth=2"], check=True)
+
             # Get the list of changed files in the latest commit
             result = subprocess.run(
                 ["git", "diff", "--name-only", "HEAD", "HEAD~1"],
@@ -24,7 +27,6 @@ steps:
             )
             return result.stdout.strip().split('\n')
 
-        
         changed_files = get_changed_files()
 #        from deploy_module.deploy import DataScanManager
 #        import os
