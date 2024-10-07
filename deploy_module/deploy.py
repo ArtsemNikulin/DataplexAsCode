@@ -3,7 +3,6 @@ from google.cloud import dataplex_v1
 from google.api_core.exceptions import AlreadyExists, NotFound
 import yaml
 import os
-from deploy_module.git_changes import get_changed_files
 
 
 class DataScanManager:
