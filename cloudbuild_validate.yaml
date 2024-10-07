@@ -13,7 +13,7 @@ steps:
     args:
       - '-c'
       - |
-        from deploy_module.git_changes import changed_files
+        from deploy_module.git_changes import get_changed_files
         from deploy_module.deploy import DataScanManager
         import os
         print("*********************************************")
