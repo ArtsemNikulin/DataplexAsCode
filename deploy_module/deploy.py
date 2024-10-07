@@ -1,6 +1,6 @@
 import time
 from google.cloud import dataplex_v1
-from google.api_core.exceptions import AlreadyExists
+from google.api_core.exceptions import AlreadyExists, NotFound
 import yaml
 import os
 from deploy_module.git_changes import get_changed_files
@@ -82,7 +82,6 @@ class DataScanManager:
                         f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' "
                         f"recreated successfully:", response)
 
-
     def delete_data_scan(self, parent, data_scan_id):
         try:
             delete_request = dataplex_v1.DeleteDataScanRequest(
@@ -90,5 +89,7 @@ class DataScanManager:
             )
             self.client.delete_data_scan(request=delete_request)
             print(f"DataScan '{data_scan_id}' deleted successfully.")
+        except NotFound as e:
+            print(f"DataScan '{data_scan_id}' already deleted: {e}")
         except Exception as e:
-            print(f"Failed to delete DataScan '{data_scan_id}': {e}")
+            raise RuntimeError(f"An error occurred while deleting DataScan '{data_scan_id}': {e}")
