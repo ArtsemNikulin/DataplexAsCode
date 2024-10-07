@@ -1,47 +1,33 @@
 import yaml
-from pathlib import Path
 
 
 class RulesReader:
-    def __init__(self, base_path):
-        """Initialize the RulesReader with the base path for rules."""
-        self.base_path = Path(base_path)
-        self.rules = {}
-        self.rule_yaml = None
+    def __init__(self, pathes):
+        self.base_path = pathes
+        self.all_rules = []
 
-    def read_rules_yaml(self, file_path):
-        """Load a rules YAML file and return its contents as a dictionary."""
-        with open(file_path, 'r') as file:
-            self.rule_yaml = yaml.safe_load(file)
-            return self.rule_yaml
-
-    def get_rules(self, dataset, table):
-        """Retrieve rules for a specific dataset and table."""
-        rule = (dataset, table)
-
-        if rule in self.rules:
-            return self.rules[rule]
-
-        rules_file_path = self.base_path / dataset / table / 'rules.yaml'
-
+    def get_rules(self, rules_file_path):
         try:
-            rules = self.read_rules_yaml(rules_file_path)
-            self.rules[rule] = rules
+            with open(rules_file_path, 'r') as file:
+                rules = yaml.safe_load(file)
             return rules
+
         except FileNotFoundError:
             raise FileNotFoundError(f"Rules file not found: {rules_file_path}")
 
-    def get_all_rules(self):
-        """Retrieve all rules for all datasets and tables."""
-        all_rules = {}
+    def get_datasets_with_rules(self):
+        for rules_path in self.base_path:
+            if rules_path.exists() and rules_path.parts[-5] == 'rules' and rules_path.parts[-4] == 'datasets':
+                dataset_name = rules_path.parts[-3]
+                table_name = rules_path.parts[-2]
+                rules = self.get_rules(rules_path)
+                self.all_rules.append({'dataset': dataset_name,
+                                       'table': table_name,
+                                       'samplingPercent': rules.get('samplingPercent', 100),
+                                       'rowFilter': rules.get('rowFilter', ""),
+                                       'labels': rules.get('labels', {}),
+                                       'executionSpec': rules.get('executionSpec', {}),
+                                       'rules': rules.get('rules', []),
+                                       })
 
-        for dataset_path in self.base_path.iterdir():
-            if dataset_path.is_dir():
-                dataset_name = dataset_path.name
-                all_rules[dataset_name] = {}
-
-                for table_path in dataset_path.iterdir():
-                    if table_path.is_dir() and (table_path / 'rules.yaml').exists():
-                        all_rules[dataset_name][table_path.name] = self.get_rules(dataset_name, table_path.name)
-
-        return all_rules
+        return self.all_rules
