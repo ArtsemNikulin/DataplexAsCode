@@ -3,7 +3,8 @@ steps:
     name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-python-app', '.']
 
-  - id: 'Run application'
+
+  - id: 'Validation'
     name: 'gcr.io/$PROJECT_ID/my-python-app'
     env:
       - 'BRANCH_NAME=$BRANCH_NAME'
@@ -12,17 +13,29 @@ steps:
     args:
       - '-c'
       - |
+        from deploy_module.git_changes import get_changed_files
+        from deploy_module.rules_reader import RulesReader
         from deploy_module.deploy import DataScanManager
         import os
+        
+        
+        print("*********************************************")
+        print(f"Getting GIT changes")
+        print("*********************************************")
+        
+        changed_files = get_changed_files()
+        changed_rules = [changed_rules for changed_rules in changed_files if changed_rules.name == 'rules.yaml']
+        
         branch_name = os.getenv('BRANCH_NAME')
         base_branch = os.getenv('BASE_BRANCH')
         pr = os.getenv('PR')
+        
         print("*********************************************")
         print(f"Validation of PR #{pr}: {branch_name} TO {base_branch}")
         print("*********************************************")
-        manager = DataScanManager(env=base_branch)
-        manager.create_data_scan(validate=False)
-               
+
+        datasets_with_rules = RulesReader(changed_rules).get_datasets_with_rules()
+        DataScanManager(env='dev', datasets_with_rules=datasets_with_rules).create_data_scans(validate=True)
 
 options:
   logging: CLOUD_LOGGING_ONLY
