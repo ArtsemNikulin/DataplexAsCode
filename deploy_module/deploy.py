@@ -72,6 +72,7 @@ class DataScanManager:
         else:
             changes = get_changed_files()
             deleted_rules = [changed_file for changed_file in changes if changed_file.name == 'rules.yaml']
+            print(deleted_rules)
             if len(deleted_rules) > 1:
                 print(f"The following rules were deleted: {changes}")
                 print('Deleting scans ...')
