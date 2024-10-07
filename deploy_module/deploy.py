@@ -71,10 +71,11 @@ class DataScanManager:
                         f"recreated successfully:", response)
         else:
             changes = get_changed_files()
-            if 'rules.yaml' in changes:
+            deleted_rules = [changed_file for changed_file in changes if changed_file.name == 'rules.yaml']
+            if len(deleted_rules) > 1:
                 print(f"The following rules were deleted: {changes}")
                 print('Deleting scans ...')
-                for rules_path in changes:
+                for rules_path in deleted_rules:
                     dataset_name = rules_path.parts[-3]
                     table_name = rules_path.parts[-2]
                 self.delete_data_scan(parent=self.config['parent'],
