@@ -50,7 +50,7 @@ class DataScanManager:
         data_scans = self.form_data_scans()
 
         for dataplex_data_scan in data_scans:
-            if type(dataplex_data_scan) == str::
+            if type(dataplex_data_scan) == str:
                 print(f"The following rules were deleted: {dataplex_data_scan}")
                 print('Deleting scans ...')
                 #     for rules_path in deleted_rules:
