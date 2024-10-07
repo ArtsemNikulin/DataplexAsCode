@@ -5,6 +5,7 @@ from deploy_module.rules_reader import RulesReader
 import os
 
 
+
 branch_name = os.getenv('BRANCH_NAME')
 base_branch = os.getenv('BASE_BRANCH')
 pr = os.getenv('PR')
