@@ -29,5 +29,8 @@ class RulesReader:
                                        'executionSpec': rules.get('executionSpec', {}),
                                        'rules': rules.get('rules', []),
                                        })
+            else:
+                print(f"Rule was deleted, since path does not exist - {rules_path}")
+                self.all_rules.append(rules_path)
 
         return self.all_rules

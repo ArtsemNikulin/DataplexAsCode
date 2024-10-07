@@ -26,27 +26,42 @@ class DataScanManager:
     def form_data_scans(self):
         dataplex_data_scans = []
         for dataset_with_rules in self.datasets_with_rules:
-            dataset = dataset_with_rules['dataset'].lower()
-            table = dataset_with_rules['table']
-            rules = dataset_with_rules['rules']
-            dataplex_data_scan = dataplex_v1.DataScan()
-            dataplex_data_scan.display_name = f"{self.env}.{dataset}.{table}"
-            dataplex_data_scan.data.resource = f"//bigquery.googleapis.com/projects/{self.config['project_id']}/" \
-                                               f"datasets/{dataset}/tables/{table}"
-            dataplex_data_scan.data_quality_spec.rules = rules
-            dataplex_data_scan.data_quality_spec.sampling_percent = dataset_with_rules.get('samplingPercent', 100)
-            dataplex_data_scan.data_quality_spec.row_filter = dataset_with_rules.get('rowFilter', "")
-            dataplex_data_scan.data_quality_spec.post_scan_actions.bigquery_export.results_table = \
-                self.config['results_table']
-            dataplex_data_scan.labels = dataset_with_rules.get('labels', {})
-            dataplex_data_scans.append(dataplex_data_scan)
+            if type(dataset_with_rules) == dict:
+                dataset = dataset_with_rules['dataset'].lower()
+                table = dataset_with_rules['table']
+                rules = dataset_with_rules['rules']
+                dataplex_data_scan = dataplex_v1.DataScan()
+                dataplex_data_scan.display_name = f"{self.env}.{dataset}.{table}"
+                dataplex_data_scan.data.resource = f"//bigquery.googleapis.com/projects/{self.config['project_id']}/" \
+                                                   f"datasets/{dataset}/tables/{table}"
+                dataplex_data_scan.data_quality_spec.rules = rules
+                dataplex_data_scan.data_quality_spec.sampling_percent = dataset_with_rules.get('samplingPercent', 100)
+                dataplex_data_scan.data_quality_spec.row_filter = dataset_with_rules.get('rowFilter', "")
+                dataplex_data_scan.data_quality_spec.post_scan_actions.bigquery_export.results_table = \
+                    self.config['results_table']
+                dataplex_data_scan.labels = dataset_with_rules.get('labels', {})
+                dataplex_data_scans.append(dataplex_data_scan)
+            else:
+                dataplex_data_scans.append(dataset_with_rules)
 
         return dataplex_data_scans
 
     def create_data_scans(self, validate=False):
         data_scans = self.form_data_scans()
-        if len(data_scans) > 0:
-            for dataplex_data_scan in data_scans:
+
+        for dataplex_data_scan in data_scans:
+            if type(dataplex_data_scan) == str::
+                print(f"The following rules were deleted: {dataplex_data_scan}")
+                print('Deleting scans ...')
+                #     for rules_path in deleted_rules:
+                #         dataset_name = rules_path.parts[-3]
+                #         table_name = rules_path.parts[-2]
+                #     self.delete_data_scan(parent=self.config['parent'],
+                #                           data_scan_id=f"scan-{self.env}-{dataset_name}-{table_name}")
+                # else:
+                #     print("There are no formalized DataScans, since no changes in Rules")
+                #     print(f"The following changes are detected: {changes}")
+            else:
                 request = dataplex_v1.CreateDataScanRequest()
                 request.parent = self.config['parent']
                 request.data_scan = dataplex_data_scan
@@ -69,21 +84,7 @@ class DataScanManager:
                     print(
                         f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' "
                         f"recreated successfully:", response)
-        else:
-            changes = get_changed_files()
-            deleted_rules = [changed_file for changed_file in changes if changed_file.name == 'rules.yaml']
-            print(deleted_rules)
-            if len(deleted_rules) > 1:
-                print(f"The following rules were deleted: {changes}")
-                print('Deleting scans ...')
-                for rules_path in deleted_rules:
-                    dataset_name = rules_path.parts[-3]
-                    table_name = rules_path.parts[-2]
-                self.delete_data_scan(parent=self.config['parent'],
-                                      data_scan_id=f"scan-{self.env}-{dataset_name}-{table_name}")
-            else:
-                print("There are no formalized DataScans, since no changes in Rules")
-                print(f"The following changes are detected: {changes}")
+
 
     def delete_data_scan(self, parent, data_scan_id):
         try:
