@@ -39,7 +39,7 @@ class DataScanManager:
             dataplex_data_scan.data_quality_spec.rules = rules
             dataplex_data_scan.data_quality_spec.sampling_percent = dataset_with_rules.get('samplingPercent', 100)
             dataplex_data_scan.data_quality_spec.row_filter = dataset_with_rules.get('rowFilter', "")
-            dataplex_data_scan.data_quality_spec.post_scan_actions.bigquery_export.results_table =\
+            dataplex_data_scan.data_quality_spec.post_scan_actions.bigquery_export.results_table = \
                 self.config['results_table']
             dataplex_data_scan.labels = dataset_with_rules.get('labels', {})
             dataplex_data_scans.append(dataplex_data_scan)
@@ -52,27 +52,32 @@ class DataScanManager:
 
     def create_data_scans(self, validate=False):
         datascans = self.form_data_scans()
-        print(len(datascans))
+        if len(datascans) > 0:
+            for dataplex_data_scan in datascans:
+                request = dataplex_v1.CreateDataScanRequest()
+                request.parent = self.config['parent']
+                request.data_scan = dataplex_data_scan
+                request.data_scan_id = 'scan-' + str(uuid.uuid4())
+                request.validate_only = validate
 
-        for dataplex_data_scan in datascans:
-            request = dataplex_v1.CreateDataScanRequest()
-            request.parent = self.config['parent']
-            request.data_scan = dataplex_data_scan
-            request.data_scan_id = 'scan-' + str(uuid.uuid4())
-            request.validate_only = validate
+                try:
+                    response = self.client.create_data_scan(request=request)
+                    print(
+                        f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' created successfully:",
+                        response)
+                except AlreadyExists:
+                    print(
+                        f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' already exists. Recreating ...")
 
-            try:
-                response = self.client.create_data_scan(request=request)
-                print("DataScan created successfully:", response)
-            except AlreadyExists:
-                print(f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' already exists. Recreating ...")
+                    self.delete_data_scan(self.config['parent'], request.data_scan_id)
+                    time.sleep(5)
 
-                self.delete_data_scan(self.config['parent'], request.data_scan_id)
-                time.sleep(5)
-
-                response = self.client.create_data_scan(request=request)
-                print(f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' recreated successfully :",
-                      response)
+                    response = self.client.create_data_scan(request=request)
+                    print(
+                        f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' recreated successfully :",
+                        response)
+        else:
+            print("There are no formilized DataScnas, probably no changes in rules")
 
     def delete_data_scan(self, parent, data_scan_id):
         try:
