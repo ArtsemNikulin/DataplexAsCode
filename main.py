@@ -15,8 +15,7 @@ print("*********************************************")
 # manager = DataScanManager('dev')
 # manager.form_data_scans()
 x = get_changed_files()
-
+z = [changed_rules for changed_rules in x if changed_rules.name == 'rules.yaml']
 # z = RulesReader(x).get_datasets_with_rules()
 
-for i in x:
-   print(i)
+print(z)

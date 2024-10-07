@@ -21,8 +21,10 @@ steps:
         print(f"Getting GIT changes")
         print("*********************************************")
         
-        changed_files = get_changed_files()
-        print(changed_files)
+        x = get_changed_files()
+        z = [changed_rules for changed_rules in x if changed_rules.name == 'rules.yaml']
+
+        print(z)
         
 #        branch_name = os.getenv('BRANCH_NAME')
 #        base_branch = os.getenv('BASE_BRANCH')
