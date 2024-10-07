@@ -17,7 +17,7 @@ class RulesReader:
 
     def get_datasets_with_rules(self):
         for rules_path in self.base_path:
-            if rules_path.exists() and rules_path.parts[-5] == 'rules' and rules_path.parts[-4] == 'datasets':
+            if rules_path.exists():
                 dataset_name = rules_path.parts[-3]
                 table_name = rules_path.parts[-2]
                 rules = self.get_rules(rules_path)
