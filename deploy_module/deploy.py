@@ -51,8 +51,10 @@ class DataScanManager:
         return id
 
     def create_data_scans(self, validate=False):
+        datascans = self.form_data_scans()
+        print(len(datascans))
 
-        for dataplex_data_scan in self.form_data_scans():
+        for dataplex_data_scan in datascans:
             request = dataplex_v1.CreateDataScanRequest()
             request.parent = self.config['parent']
             request.data_scan = dataplex_data_scan
