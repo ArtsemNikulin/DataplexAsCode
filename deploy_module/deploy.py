@@ -49,6 +49,7 @@ class DataScanManager:
         data_scans = self.form_data_scans()
         for dataplex_data_scan in data_scans:
             print(type(dataplex_data_scan))
+            print(dataplex_data_scan)
             if not isinstance(dataplex_data_scan, dataplex_v1.types.datascans.DataScan):
                 print(f"The following rules were deleted: {dataplex_data_scan}")
                 print('Deleting scans ...')
