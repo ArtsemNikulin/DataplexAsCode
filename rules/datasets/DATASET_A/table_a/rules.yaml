@@ -5,15 +5,15 @@ rules:
     description: Sample rule for non-null column
     threshold: 1.0
     non_null_expectation: {}
-#  - column: test
-#    dimension: VALIDITY
-#    name: one-of-set
-#    description: Sample rule for values in a set
-#    ignore_null: false
-#    set_expectation:
-#      values:
-#        - Shipped
-#        - Complete
-#        - Processing
-#        - Cancelled
-#        - Returned
+  - column: test
+    dimension: VALIDITY
+    name: one-of-set
+    description: Sample rule for values in a set
+    ignore_null: false
+    set_expectation:
+      values:
+        - Shipped
+        - Complete
+        - Processing
+        - Cancelled
+        - Returned

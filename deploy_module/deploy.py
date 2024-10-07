@@ -3,7 +3,6 @@ from google.cloud import dataplex_v1
 from google.api_core.exceptions import AlreadyExists
 import yaml
 import os
-import uuid
 from deploy_module.git_changes import get_changed_files
 
 
@@ -51,7 +50,8 @@ class DataScanManager:
                 request = dataplex_v1.CreateDataScanRequest()
                 request.parent = self.config['parent']
                 request.data_scan = dataplex_data_scan
-                request.data_scan_id = 'scan-' + (dataplex_data_scan.display_name.translate(str.maketrans('._', '--'))).lower()
+                request.data_scan_id = 'scan-' + (
+                    dataplex_data_scan.display_name.translate(str.maketrans('._', '--'))).lower()
                 request.validate_only = validate
 
                 try:
