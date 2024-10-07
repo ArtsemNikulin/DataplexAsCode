@@ -26,6 +26,7 @@ class DataScanManager:
     def form_data_scans(self):
         dataplex_data_scans = []
         for dataset_with_rules in self.datasets_with_rules:
+            print(type(dataset_with_rules))
             if type(dataset_with_rules) == dict:
                 dataset = dataset_with_rules['dataset'].lower()
                 table = dataset_with_rules['table']
@@ -50,6 +51,7 @@ class DataScanManager:
         data_scans = self.form_data_scans()
 
         for dataplex_data_scan in data_scans:
+            print(type(dataplex_data_scan))
             if type(dataplex_data_scan) == str:
                 print(f"The following rules were deleted: {dataplex_data_scan}")
                 print('Deleting scans ...')
