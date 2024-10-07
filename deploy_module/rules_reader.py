@@ -30,7 +30,8 @@ class RulesReader:
                                        'rules': rules.get('rules', []),
                                        })
             else:
-                print(f"Rule was deleted, since path does not exist - {rules_path}")
+                print(f"Rules were deleted, since path does not exist - {rules_path}")
+                print("Corresponding data scan will be deleted")
                 self.all_rules.append(rules_path)
 
         return self.all_rules
