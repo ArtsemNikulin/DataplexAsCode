@@ -12,5 +12,11 @@ pr = os.getenv('PR')
 print("*********************************************")
 print(f"Validation of PR #{pr}: {branch_name} TO {base_branch}")
 print("*********************************************")
-manager = DataScanManager('dev')
-manager.form_data_scans()
+# manager = DataScanManager('dev')
+# manager.form_data_scans()
+x = get_changed_files()
+
+# z = RulesReader(x).get_datasets_with_rules()
+
+for i in x:
+   print(i)
