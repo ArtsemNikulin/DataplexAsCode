@@ -1,17 +1,14 @@
-import json
 import time
 from google.cloud import dataplex_v1
 from google.api_core.exceptions import AlreadyExists
-from deploy_module.rules_reader import RulesReader
 import yaml
 import os
 import uuid
-from google.oauth2 import service_account
-
+from deploy_module.git_changes import get_changed_files
 
 class DataScanManager:
     def __init__(self, env, datasets_with_rules):
-        self.env = 'dev'  # env
+        self.env = env
         self.root_path = os.path.dirname(os.path.dirname(__file__))
         self.client = dataplex_v1.DataScanServiceClient()
         if self.env.lower() == 'dev':
@@ -77,7 +74,8 @@ class DataScanManager:
                         f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' recreated successfully :",
                         response)
         else:
-            print("There are no formilized DataScnas, probably no changes in rules")
+            print("There are no formalized DataScans, probably no changes in Rules")
+            print(f"Identifited changes: {get_changed_files()}")
 
     def delete_data_scan(self, parent, data_scan_id):
         try:
