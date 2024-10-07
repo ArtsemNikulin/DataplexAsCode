@@ -10,7 +10,7 @@ from google.oauth2 import service_account
 
 
 class DataScanManager:
-    def __init__(self, env):
+    def __init__(self, env, datasets_with_rules):
         self.env = 'dev'  # env
         self.root_path = os.path.dirname(os.path.dirname(__file__))
         self.client = dataplex_v1.DataScanServiceClient()
@@ -19,7 +19,7 @@ class DataScanManager:
         elif self.env.lower() == 'prod':
             self.config_file_path = os.path.join(self.root_path, 'configs/prod_config.yaml')
         self.config = self.read_config()
-        self.datasets_with_rules = RulesReader().get_all_rules()
+        self.datasets_with_rules = datasets_with_rules
 
     def read_config(self):
         with open(self.config_file_path, 'r') as config:

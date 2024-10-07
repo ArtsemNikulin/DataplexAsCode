@@ -14,6 +14,7 @@ steps:
       - '-c'
       - |
         from deploy_module.git_changes import get_changed_files
+        from deploy_module.rules_reader import RulesReader
         from deploy_module.deploy import DataScanManager
         import os
         print("*********************************************")
@@ -29,6 +30,8 @@ steps:
         print("*********************************************")
         print(f"Validation of PR #{pr}: {branch_name} TO {base_branch}")
         print("*********************************************")
+        x = RulesReader().get_datasets_with_rules()
+        print(x)        
 
 #        manager = DataScanManager(env=base_branch)
 #        manager.create_data_scans(validate=True)

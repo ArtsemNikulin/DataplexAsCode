@@ -1,10 +1,10 @@
 import yaml
-from pathlib import Path
+
 
 
 class RulesReader:
-    def __init__(self):
-        self.base_path = Path('rules/datasets')
+    def __init__(self, pathes):
+        self.base_path = pathes
         self.all_rules = []
 
     def get_rules(self, dataset, table):
@@ -17,8 +17,9 @@ class RulesReader:
         except FileNotFoundError:
             raise FileNotFoundError(f"Rules file not found: {rules_file_path}")
 
-    def get_all_rules(self):
-        for dataset_path in self.base_path.iterdir():
+    def get_datasets_with_rules(self):
+        base_path = self.base_path
+        for dataset_path in base_path.iterdir():
             if dataset_path.is_dir():
                 dataset_name = dataset_path.name
                 for table_path in dataset_path.iterdir():
