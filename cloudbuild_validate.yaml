@@ -25,7 +25,6 @@ steps:
         
         changed_files = get_changed_files()
         changed_rules = [changed_rules for changed_rules in changed_files if changed_rules.name == 'rules.yaml']
-        print(changed_rules)
         
         branch_name = os.getenv('BRANCH_NAME')
         base_branch = os.getenv('BASE_BRANCH')

@@ -48,20 +48,16 @@ class DataScanManager:
 
     def create_data_scans(self, validate=False):
         data_scans = self.form_data_scans()
-
         for dataplex_data_scan in data_scans:
             print(type(dataplex_data_scan))
             if type(dataplex_data_scan) != 'google.cloud.dataplex_v1.types.datascans.DataScan':
                 print(f"The following rules were deleted: {dataplex_data_scan}")
                 print('Deleting scans ...')
-                #     for rules_path in deleted_rules:
-                #         dataset_name = rules_path.parts[-3]
-                #         table_name = rules_path.parts[-2]
-                #     self.delete_data_scan(parent=self.config['parent'],
-                #                           data_scan_id=f"scan-{self.env}-{dataset_name}-{table_name}")
-                # else:
-                #     print("There are no formalized DataScans, since no changes in Rules")
-                #     print(f"The following changes are detected: {changes}")
+                dataset_name = dataplex_data_scan.parts[-3]
+                table_name = dataplex_data_scan.parts[-2]
+                self.delete_data_scan(parent=self.config['parent'],
+                                      data_scan_id=f"scan-{self.env}-{dataset_name}-{table_name}")
+
             else:
                 request = dataplex_v1.CreateDataScanRequest()
                 request.parent = self.config['parent']

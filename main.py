@@ -15,4 +15,4 @@ x = [
 
 # Filter the list for paths that end with 'rules.yaml'
 
-print(result)
+
