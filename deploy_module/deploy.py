@@ -56,20 +56,19 @@ class DataScanManager:
 
                 try:
                     response = self.client.create_data_scan(request=request)
-                    print(
-                        f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' created successfully:",
-                        response)
+                    print(f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})'"
+                          f" created successfully:", response)
                 except AlreadyExists:
-                    print(
-                        f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' already exists. Recreating ...")
+                    print(f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' "
+                          f"already exists. Recreating ...")
 
                     self.delete_data_scan(self.config['parent'], request.data_scan_id)
                     time.sleep(5)
 
                     response = self.client.create_data_scan(request=request)
                     print(
-                        f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' recreated successfully :",
-                        response)
+                        f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' "
+                        f"recreated successfully:", response)
         else:
             changes = get_changed_files()
             if 'rules.yaml' in changes:
