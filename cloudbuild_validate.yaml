@@ -33,9 +33,13 @@ steps:
         print("*********************************************")
         print(f"Validation of PR #{pr}: {branch_name} TO {base_branch}")
         print("*********************************************")
-
-        datasets_with_rules = RulesReader(changed_rules).get_datasets_with_rules()
-        DataScanManager(env='dev', datasets_with_rules=datasets_with_rules).create_data_scans(validate=True)
+        
+        if len('changed_rules') == 0:    
+            print("There are no formalized DataScans, since no changes in Rules")
+            print(f"The following changes are detected: {changed_files}")
+        else:
+            datasets_with_rules = RulesReader(changed_rules).get_datasets_with_rules()
+            DataScanManager(env='dev', datasets_with_rules=datasets_with_rules).create_data_scans(validate=True)
 
 options:
   logging: CLOUD_LOGGING_ONLY
