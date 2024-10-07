@@ -13,11 +13,12 @@ steps:
       - '-c'
       - |
         import subprocess
-
+        import os
+        
         def get_changed_files():
             # Fetch the previous commit
             subprocess.run(["git", "fetch", "--depth=2"], check=True)
-
+        
             # Get the list of changed files in the latest commit
             result = subprocess.run(
                 ["git", "diff", "--name-only", "HEAD", "HEAD~1"],
@@ -25,8 +26,15 @@ steps:
                 text=True,
                 check=True
             )
-            return result.stdout.strip().split('\n')
-
+            
+            # Split the output into lines (files) and get the current working directory
+            changed_files = result.stdout.strip().split('\n')
+            current_directory = os.getcwd()
+        
+            # Create a list of full paths
+            full_paths = [os.path.join(current_directory, file) for file in changed_files]
+            return full_paths
+        
         changed_files = get_changed_files()
         print(changed_files)
 #        from deploy_module.deploy import DataScanManager
