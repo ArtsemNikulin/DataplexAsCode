@@ -19,7 +19,7 @@ class DataScanManager:
         elif self.env.lower() == 'prod':
             self.config_file_path = os.path.join(self.root_path, 'configs/prod_config.yaml')
         self.config = self.read_config()
-        self.datasets_with_rules = RulesReader(self.config['data_quality_rules']).get_all_rules()
+        self.datasets_with_rules = RulesReader().get_all_rules()
 
     def read_config(self):
         with open(self.config_file_path, 'r') as config:
