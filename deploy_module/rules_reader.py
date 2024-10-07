@@ -3,8 +3,8 @@ from pathlib import Path
 
 
 class RulesReader:
-    def __init__(self, base_path):
-        self.base_path = Path(base_path)
+    def __init__(self):
+        self.base_path = Path('rules/datasets')
         self.all_rules = []
 
     def get_rules(self, dataset, table):
