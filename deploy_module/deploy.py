@@ -56,23 +56,32 @@ class DataScanManager:
 
                 try:
                     response = self.client.create_data_scan(request=request)
-                    print(
-                        f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' created successfully:",
-                        response)
+                    print(f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})'"
+                          f" created successfully:", response)
                 except AlreadyExists:
-                    print(
-                        f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' already exists. Recreating ...")
+                    print(f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' "
+                          f"already exists. Recreating ...")
 
                     self.delete_data_scan(self.config['parent'], request.data_scan_id)
                     time.sleep(5)
 
                     response = self.client.create_data_scan(request=request)
                     print(
-                        f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' recreated successfully :",
-                        response)
+                        f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' "
+                        f"recreated successfully:", response)
         else:
-            print("There are no formalized DataScans, probably no changes in Rules")
-            print(f"Identifited changes: {get_changed_files()}")
+            changes = get_changed_files()
+            if 'rules.yaml' in changes:
+                print(f"The following rules were deleted: {changes}")
+                print('Deleting scans ...')
+                for rules_path in changes:
+                    dataset_name = rules_path.parts[-3]
+                    table_name = rules_path.parts[-2]
+                self.delete_data_scan(parent=self.config['parent'],
+                                      data_scan_id=f"scan-{self.env}-{dataset_name}-{table_name}")
+            else:
+                print("There are no formalized DataScans, since no changes in Rules")
+                print(f"The following changes are detected: {changes}")
 
     def delete_data_scan(self, parent, data_scan_id):
         try:
