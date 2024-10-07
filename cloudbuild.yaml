@@ -27,15 +27,13 @@ steps:
         changed_rules = [changed_rules for changed_rules in changed_files if changed_rules.name == 'rules.yaml']
         
         branch_name = os.getenv('BRANCH_NAME')
-        base_branch = os.getenv('BASE_BRANCH')
-        pr = os.getenv('PR')
+        project_id = os.getenv('PROJECT_ID')
+        print("*********************************************")
+        print(f"Deploy of {branch_name} branch ON {project_id}")
+        print("*********************************************")
         
-        print("*********************************************")
-        print(f"Merging {branch_name} INTO {base_branch}")
-        print("*********************************************")
-
         datasets_with_rules = RulesReader(changed_rules).get_datasets_with_rules()
-        DataScanManager(env=branch_name, datasets_with_rules=datasets_with_rules).create_data_scans(validate=True)
+        DataScanManager(env=branch_name, datasets_with_rules=datasets_with_rules).create_data_scans(validate=False)
                
 
 options:
