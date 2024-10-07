@@ -28,10 +28,9 @@ steps:
         
         changed_files = get_changed_files()
         changed_rules = [changed_rules for changed_rules in changed_files if changed_rules.name == 'rules.yaml']
-        print(changed_rules)
         
         if len(changed_rules) == 0:    
-            print("There are no formalized DataScans, since no changes in Rules")
+            print("There are no formalized DataScans. Since no changes in Rules - validation skipped")
             print(f"The following changes are detected: {changed_files}")
 
         else:
