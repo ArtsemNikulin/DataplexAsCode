@@ -44,18 +44,14 @@ class DataScanManager:
 
         return dataplex_data_scans
 
-    def create_scan_id(self):
-        id = str(uuid.uuid4())
-        return id
-
     def create_data_scans(self, validate=False):
-        datascans = self.form_data_scans()
-        if len(datascans) > 0:
-            for dataplex_data_scan in datascans:
+        data_scans = self.form_data_scans()
+        if len(data_scans) > 0:
+            for dataplex_data_scan in data_scans:
                 request = dataplex_v1.CreateDataScanRequest()
                 request.parent = self.config['parent']
                 request.data_scan = dataplex_data_scan
-                request.data_scan_id = 'scan-' + str(uuid.uuid4())
+                request.data_scan_id = 'scan-' + (dataplex_data_scan.display_name.replace('.', '_')).lower()
                 request.validate_only = validate
 
                 try:

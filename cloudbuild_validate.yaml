@@ -35,7 +35,7 @@ steps:
         print("*********************************************")
 
         datasets_with_rules = RulesReader(changed_rules).get_datasets_with_rules()
-        DataScanManager(env='dev', datasets_with_rules=datasets_with_rules).create_data_scans()
+        DataScanManager(env='dev', datasets_with_rules=datasets_with_rules).create_data_scans(validate=False)
 
 options:
   logging: CLOUD_LOGGING_ONLY
