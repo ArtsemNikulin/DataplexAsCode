@@ -2,8 +2,7 @@ samplingPercent: 100
 rowFilter:
 executionSpec:
   trigger:
-    schedule:
-      cron: ""
+    onDemand: {}
 rules:
   - column: id
     dimension: COMPLETENESS
