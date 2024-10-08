@@ -3,7 +3,7 @@ rowFilter:
 executionSpec:
   trigger:
     schedule:
-      cron: #if empty - onDemand
+      cron: TZ=Etc/GMT+8 0 11 * * * #if empty - onDemand
 rules:
   - column: id
     dimension: COMPLETENESS
