@@ -28,7 +28,7 @@ class DataScanManager:
                 dataset = dataset_with_rules['dataset'].lower()
                 table = dataset_with_rules['table']
                 rules = dataset_with_rules['rules']
-                dataplex_data_scan = dataplex_v1.DataScan().
+                dataplex_data_scan = dataplex_v1.DataScan()
                 dataplex_data_scan.display_name = f"{self.env}.{dataset}.{table}"
                 dataplex_data_scan.data.resource = f"//bigquery.googleapis.com/projects/{self.config['project_id']}/" \
                                                    f"datasets/{dataset}/tables/{table}"
