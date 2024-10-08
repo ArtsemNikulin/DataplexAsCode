@@ -1,4 +1,3 @@
-import time
 from google.cloud import dataplex_v1
 from google.api_core.exceptions import AlreadyExists, NotFound
 import yaml
@@ -57,8 +56,11 @@ class DataScanManager:
                     print('Deleting scans ...')
                     dataset_name = dataplex_data_scan.parts[-3]
                     table_name = dataplex_data_scan.parts[-2]
+                    data_scan_id = (
+                        f"scan-{self.env}-{dataset_name}-{table_name}".translate(str.maketrans('._', '--'))
+                    ).lower()
                     self.delete_data_scan(parent=self.config['parent'],
-                                      data_scan_id=f"scan-{self.env}-{dataset_name}-{table_name}".lower())
+                                          data_scan_id=data_scan_id)
 
             else:
                 request = dataplex_v1.CreateDataScanRequest()
