@@ -39,6 +39,7 @@ class DataScanManager:
                     self.config['results_table']
                 dataplex_data_scan.labels = dataset_with_rules.get('labels', {})
                 cron = dataset_with_rules.get('executionSpec', {}).get('trigger', {}).get('schedule', {}).get('cron', '')
+                print(cron)
 
                 if cron != '':
                     dataplex_data_scan.execution_spec.trigger.schedule.cron = cron
