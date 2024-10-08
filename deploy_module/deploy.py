@@ -51,11 +51,14 @@ class DataScanManager:
             print(type(dataplex_data_scan))
             if not isinstance(dataplex_data_scan, dataplex_v1.types.datascans.DataScan):
                 print(f"The following rules were deleted: {dataplex_data_scan}")
-                print('Deleting scans ...')
-                dataset_name = dataplex_data_scan.parts[-3]
-                table_name = dataplex_data_scan.parts[-2]
-                self.delete_data_scan(parent=self.config['parent'],
-                                      data_scan_id=f"scan-{self.env}-{dataset_name}-{table_name}")
+                if validate:
+                    print("Delete would performed within Deploy")
+                else:
+                    print('Deleting scans ...')
+                    dataset_name = dataplex_data_scan.parts[-3]
+                    table_name = dataplex_data_scan.parts[-2]
+                    self.delete_data_scan(parent=self.config['parent'],
+                                      data_scan_id=f"scan-{self.env}-{dataset_name}-{table_name}".lower())
 
             else:
                 request = dataplex_v1.CreateDataScanRequest()
