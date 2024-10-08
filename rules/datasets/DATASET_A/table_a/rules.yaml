@@ -3,7 +3,7 @@ rowFilter:
 executionSpec:
   trigger:
     schedule:
-      cron: TZ=Etc/GMT+8 0 12 * * *  #every day at midnight Etc/GMT+8
+      cron: TZ=Etc/GMT+8 0 12 * * *  #every day at 00.00 Etc/GMT+8
 rules:
   - column: id
     dimension: COMPLETENESS

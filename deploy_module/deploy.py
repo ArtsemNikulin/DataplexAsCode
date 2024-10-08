@@ -38,10 +38,12 @@ class DataScanManager:
                 dataplex_data_scan.data_quality_spec.post_scan_actions.bigquery_export.results_table = \
                     self.config['results_table']
                 dataplex_data_scan.labels = dataset_with_rules.get('labels', {})
-                dataplex_data_scan.execution_spec.trigger.schedule.cron = dataset_with_rules.get('executionSpec', {})\
-                                                                                            .get('trigger', {})\
-                                                                                            .get('schedule', {})\
-                                                                                            .get('cron', '')
+                cron = dataset_with_rules.get('executionSpec', {}).get('trigger', {}).get('schedule', {}).get('cron', '')
+
+                if cron != '':
+                    dataplex_data_scan.execution_spec.trigger.schedule.cron = cron
+                else:
+                    dataplex_data_scan.execution_spec.trigger.on_demand = {}
 
                 dataplex_data_scans.append(dataplex_data_scan)
 
