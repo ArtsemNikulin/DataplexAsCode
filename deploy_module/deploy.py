@@ -28,7 +28,7 @@ class DataScanManager:
                 dataset = dataset_with_rules['dataset'].lower()
                 table = dataset_with_rules['table']
                 rules = dataset_with_rules['rules']
-                dataplex_data_scan = dataplex_v1.DataScan()
+                dataplex_data_scan = dataplex_v1.DataScan().
                 dataplex_data_scan.display_name = f"{self.env}.{dataset}.{table}"
                 dataplex_data_scan.data.resource = f"//bigquery.googleapis.com/projects/{self.config['project_id']}/" \
                                                    f"datasets/{dataset}/tables/{table}"
@@ -41,7 +41,7 @@ class DataScanManager:
                 cron = dataset_with_rules.get('executionSpec', {}).get('trigger', {}).get('schedule', {}).get('cron', '')
                 print(cron)
 
-                if cron != '':
+                if cron is not None:
                     dataplex_data_scan.execution_spec.trigger.schedule.cron = cron
                 else:
                     dataplex_data_scan.execution_spec.trigger.on_demand = {}
