@@ -10,7 +10,7 @@ rules:
   - column: test
     dimension: VALIDITY
     name: one-of-set
-    description: Sample rule for values in a set
+    description: Samples rule for values in a set
     ignore_null: false
     set_expectation:
       values:

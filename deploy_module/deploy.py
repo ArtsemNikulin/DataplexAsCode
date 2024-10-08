@@ -49,7 +49,6 @@ class DataScanManager:
         data_scans = self.form_data_scans()
         for dataplex_data_scan in data_scans:
             print(type(dataplex_data_scan))
-            print(dataplex_data_scan)
             if not isinstance(dataplex_data_scan, dataplex_v1.types.datascans.DataScan):
                 print(f"The following rules were deleted: {dataplex_data_scan}")
                 print('Deleting scans ...')
@@ -75,12 +74,11 @@ class DataScanManager:
                           f"already exists. Recreating ...")
 
                     self.delete_data_scan(self.config['parent'], request.data_scan_id)
-                    time.sleep(5)
 
-                    response = self.client.create_data_scan(request=request)
+                    new_response = self.client.create_data_scan(request=request)
                     print(
                         f"DataScan '{request.data_scan_id} ({dataplex_data_scan.display_name})' "
-                        f"recreated successfully:", response)
+                        f"recreated successfully:", new_response)
 
     def delete_data_scan(self, parent, data_scan_id):
         try:
