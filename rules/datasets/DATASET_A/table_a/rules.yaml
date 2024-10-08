@@ -7,7 +7,7 @@ rules:
     description: Sample rule for non-null column
     threshold: 1.0
     non_null_expectation: {}
-  - column: status
+  - column: test
     dimension: VALIDITY
     name: one-of-set
     description: Sample rule for values in a set
