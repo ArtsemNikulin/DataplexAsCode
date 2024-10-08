@@ -3,7 +3,7 @@ rowFilter:
 executionSpec:
   trigger:
     schedule:
-      cron: TZ=TZ=Europe/Minsk 0 12 * * * #if empty - onDemand
+      cron: TZ=Europe/Minsk 0 12 * * * #if empty - onDemand
 rules:
   - column: id
     dimension: COMPLETENESS
