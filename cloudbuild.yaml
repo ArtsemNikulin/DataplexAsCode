@@ -8,8 +8,7 @@ steps:
     name: 'gcr.io/$PROJECT_ID/my-python-app'
     env:
       - 'BRANCH_NAME=$BRANCH_NAME'
-      - 'BASE_BRANCH=$_BASE_BRANCH'
-      - 'PR=$_PR_NUMBER'
+      - 'PROJECT_ID=$PROJECT_ID'
     args:
       - '-c'
       - |
