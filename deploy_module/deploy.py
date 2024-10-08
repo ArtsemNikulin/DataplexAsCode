@@ -8,7 +8,7 @@ class DataScanManager:
     def __init__(self, env, datasets_with_rules):
         self.env = env
         self.root_path = os.path.dirname(os.path.dirname(__file__))
-        #self.client = dataplex_v1.DataScanServiceClient()
+        self.client = dataplex_v1.DataScanServiceClient()
         if self.env.lower() == 'dev':
             self.config_file_path = os.path.join(self.root_path, 'configs/dev_config.yaml')
         elif self.env.lower() == 'prod':
