@@ -9,12 +9,6 @@ rules:
   - column: id
     dimension: COMPLETENESS
     name: non-null
-    description: Sample rules for non-null column
-    threshold: 1.0
-    non_null_expectation: {}
-  - column: test
-    dimension: COMPLETENESS
-    name: non-null
     description: Sample rule for non-null column
     threshold: 1.0
-    non_null_expectation: { }
+    non_null_expectation: {}
