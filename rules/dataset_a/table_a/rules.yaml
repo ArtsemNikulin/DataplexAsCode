@@ -1,6 +1,6 @@
 samplingPercent: 100
 rowFilter:
-labels: {label: value}
+labels: {"key1": "value1", "key": "value"}
 executionSpec:
   trigger:
     schedule:
