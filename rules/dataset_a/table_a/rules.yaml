@@ -1,5 +1,6 @@
 samplingPercent: 100
 rowFilter:
+labels: {label: value}
 executionSpec:
   trigger:
     schedule:
